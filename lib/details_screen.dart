@@ -43,13 +43,20 @@ class _GetProductState extends State<GetProduct> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.productListModel.productName,
+                Text("Product: ${widget.productListModel.productName}",
                     style: const TextStyle(fontSize: 15, height: 3)),
                 Text(
                   "Price: ${widget.productListModel.price}",
                   style: const TextStyle(fontSize: 15, height: 3),
-                )
+                ),
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 210),
+              child: Text(widget.productListModel.categoryName,
+                style: TextStyle(
+                    fontSize: 9,
+                    color: Colors.grey),),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,7 +75,7 @@ class _GetProductState extends State<GetProduct> {
                   style: TextStyle(height: 1, fontSize: 16)),
             ),
             Text(
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took "
+                "Lorem Ipsum is simply dummy text sum h theer took ${widget.productListModel.description}"
             ),
             SizedBox(
               height: 35,
