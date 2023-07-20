@@ -141,7 +141,8 @@ class _productScreenState extends State<productScreen> {
                                                      productListModel:
                                                         productlist[index],
                                                   ),
-                                                ));
+                                                )
+                                            );
 
                                             if(refresh == "refresh"){
                                                getproduct();
@@ -204,7 +205,7 @@ class _productScreenState extends State<productScreen> {
       setState(() {});
 
       setState(() {
-        isLoding = false;
+        isLoding = true;
       });
     } catch (e) {
       print(e);

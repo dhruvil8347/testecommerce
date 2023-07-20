@@ -226,7 +226,8 @@ class _AddproductState extends State<Addproduct> {
               ElevatedButton(
                   style:
                   ElevatedButton.styleFrom(fixedSize: const Size(350, 40)),
-                  onPressed: () {
+                  onPressed: () async{
+
                     print('UPDATE:::::::::::${widget.productListModel.id}');
                     /*   widget.productListModel.id > 0 & productmodel.id == 0
                           ? addProduct()
@@ -258,7 +259,7 @@ class _AddproductState extends State<Addproduct> {
                       addProduct();
                     }
 
-                    Navigator.of(context).pop();
+                    Navigator.of(context,rootNavigator: true).pop();
                   },
                   child: Text(isEdit ? "Update" : "SAVE")),
 
