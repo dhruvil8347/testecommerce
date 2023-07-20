@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:js_interop';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -240,6 +241,10 @@ class _AddproductState extends State<Addproduct> {
                               categoryId: categoryValue ?? 0,
                               companyId: companyValue ?? 0,
                             ));*/
+                  /*  if (fromkey.currentState!.validate())
+                    {
+
+                    }*/
                     if (widget.productListModel.id > 0) {
                       editProduct(productModel(
                         id: widget.productListModel.id,
@@ -259,7 +264,7 @@ class _AddproductState extends State<Addproduct> {
                       addProduct();
                     }
 
-                    Navigator.of(context,rootNavigator: true).pop();
+                    Navigator.of(context).pop();
                   },
                   child: Text(isEdit ? "Update" : "SAVE")),
 

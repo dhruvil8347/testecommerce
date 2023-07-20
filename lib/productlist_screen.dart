@@ -28,12 +28,9 @@ class _productScreenState extends State<productScreen> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      getproduct();
-
-    });
-
+    getproduct();
   }
+
   bool value = false;
   @override
   Widget build(BuildContext context) {
@@ -138,14 +135,13 @@ class _productScreenState extends State<productScreen> {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       Addproduct(
-                                                     productListModel:
+                                                    productListModel:
                                                         productlist[index],
                                                   ),
-                                                )
-                                            );
+                                                ));
 
                                             if(refresh == "refresh"){
-                                               getproduct();
+                                              getproduct();
                                             }
                                           },
                                           style: ElevatedButton.styleFrom(
@@ -194,7 +190,7 @@ class _productScreenState extends State<productScreen> {
   }
   void getproduct() async {
     try {
-      isLoding = true;
+      isLoding = false;
       var response = await Dio()
           .get("https://testecommerce.equitysofttechnologies.com/product/get");
       print(response.data);
@@ -202,10 +198,12 @@ class _productScreenState extends State<productScreen> {
           response.data['r'].map((e) => productModel.fromJson(e)));
       /*productimg = List<ProductImg>.from(response.data.map((e)=> ProductImg.fromJson(e)));*/
 
-      setState(() {});
+      setState(() {
+        getproduct();
+      });
 
       setState(() {
-        isLoding = true;
+        isLoding = false;
       });
     } catch (e) {
       print(e);
@@ -237,7 +235,7 @@ class _productScreenState extends State<productScreen> {
 
   void deleteProduct(int id) async {
     try {
-      isLoding = true;
+      isLoding = false;
       Map<String, dynamic> body = {'id': id};
       var response = await Dio().post(
           "https://testecommerce.equitysofttechnologies.com/product/delete",

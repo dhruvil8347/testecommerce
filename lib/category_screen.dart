@@ -151,7 +151,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                                   deleteCategory(
                                                       categoryList[index].id);
                                                   Navigator.of(context).pop();
-                                                }, child: Text("Delete")),
+                                                }, child: Text("Delete",style: TextStyle(color: Colors.red),)),
                                               ],
                                             );
                                           },)
