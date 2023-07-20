@@ -10,7 +10,10 @@ class AppTextfiled extends StatelessWidget {
     this.textColor,
     this.maxLines,
     this.minLines,
-     this.validator,
+    this.validator,
+
+
+
   }) : super(key: key);
 
   final TextEditingController? controller;
@@ -18,7 +21,7 @@ class AppTextfiled extends StatelessWidget {
   final Color? cursorColor;
   final bool obscureText;
   final String label;
-  final  validator;
+  final String? Function(String?)? validator;
   final Color? textColor;
   final int? maxLines;
   final int? minLines;
@@ -29,7 +32,7 @@ class AppTextfiled extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
-        validator:validator,
+        validator: validator,
         controller: controller,
         keyboardType: keyboardType,
         cursorColor: cursorColor,

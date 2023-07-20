@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:js_interop';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -144,6 +143,7 @@ class _AddproductState extends State<Addproduct> {
                 height: 10,
               ),
               AppTextfiled(
+
                   controller: descriptionCtrl,
                   maxLines: 5,
                   obscureText: false,
@@ -391,9 +391,6 @@ class _AddproductState extends State<Addproduct> {
       productlist = List<productModel>.from(
           response.data['r'].map((e) => productModel.fromJson(e)));
       /*productimg = List<ProductImg>.from(response.data.map((e)=> ProductImg.fromJson(e)));*/
-
-      setState(() {});
-
       setState(() {
         isLoding = false;
       });
@@ -401,4 +398,4 @@ class _AddproductState extends State<Addproduct> {
       print(e);
     }
   }
-}///erfer
+}

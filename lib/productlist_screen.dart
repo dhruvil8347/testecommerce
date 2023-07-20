@@ -199,7 +199,7 @@ class _productScreenState extends State<productScreen> {
       /*productimg = List<ProductImg>.from(response.data.map((e)=> ProductImg.fromJson(e)));*/
 
       setState(() {
-        getproduct();
+         getproduct();
       });
 
       setState(() {
