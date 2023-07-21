@@ -59,6 +59,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
               print("null");
             },
               onPressed: () {
+              FocusNode currentFocus =  FocusScope.of(context);
+              if(!currentFocus.hasPrimaryFocus){
+                currentFocus.unfocus();
+              }
                 if (fromkey.currentState!.validate()) {
                   categoryModel.categoryName = categoryCtrl.text.trim();
                   if (categoryModel.id != 0) {
@@ -66,6 +70,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     editCategory(categoryModel);
                   } else {
                     addCategory();
+                    categoryCtrl.clear();
                   }
                 }
               },
@@ -96,9 +101,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
             child: Text("List of companies"),
           ),
           Expanded(
-            child: isLoding
+            child:
+            isLoding
                 ? Lottie.asset("assets/lottie/a.json")
-                : ListView.builder(
+                :
+
+            ListView.builder(
                     itemCount: categoryList.length,
                     itemBuilder: (context, index) {
                       print("data->${categoryList[index].categoryName}");
@@ -110,11 +118,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               color: Colors.blue),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                             children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              SizedBox(
+                                width: 230,
                                 child: Text(
                                   categoryList[index].categoryName,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -223,7 +236,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   void addCategory() async {
     try {
-      isLoding = true;
+      isLoding = false;
       Map<String, dynamic> body = {'category_name': categoryCtrl.text.trim()};
       var response = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/category/add",

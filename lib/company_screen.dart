@@ -57,6 +57,7 @@ class _CompanyState extends State<CompanyScreen> {
                   return null;
                 },
                 controller: nameCtrl,
+
                 decoration: InputDecoration(
                     label: const Text("Company Name"),
                     border: OutlineInputBorder(
@@ -69,18 +70,24 @@ class _CompanyState extends State<CompanyScreen> {
                 print("null");
               },
               onPressed: () {
-                print("id->${companyModel.id}");
-                if (fromkey.currentState!.validate()) {
-                  companyModel.companyName = nameCtrl.text.trim();
-
-                  if (companyModel.id != 0) {
-                    nameCtrl.clear();
-                    editcompany(companyModel);
-                  } else {
-                    addcompany();
-                  }
-                  nameCtrl.clear();
+                FocusNode currentFocus = FocusScope.of(context);
+                if(!currentFocus.hasPrimaryFocus){
+                  currentFocus.unfocus();
                 }
+                print("id->${companyModel.id}");
+
+                  if (fromkey.currentState!.validate()) {
+                    companyModel.companyName = nameCtrl.text.trim();
+                    if (companyModel.id != 0) {
+                      nameCtrl.clear();
+                      editcompany(companyModel);
+                    }
+                    else {
+                      addcompany();
+                    }
+                    nameCtrl.clear();
+                  }
+
               },
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(330, 45),
@@ -111,7 +118,10 @@ class _CompanyState extends State<CompanyScreen> {
           Expanded(
             child: isLoding
                 ? Lottie.asset("assets/lottie/a.json")
-                : ListView.builder(
+                :
+            comapanyList.isEmpty?
+            Image.asset("assets/images/data.png"):
+            ListView.builder(
                     itemCount: comapanyList.length,
                     itemBuilder: (context, index) {
                       return ListTile(
@@ -123,11 +133,18 @@ class _CompanyState extends State<CompanyScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(comapanyList[index].companyName,
+                              SizedBox(width: 2,),
+                              SizedBox(
+                                width: 230,
+                                child: Text(
+                                    comapanyList[index].companyName,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: true,
+                                    maxLines: 1,
                                     style:
-                                        const TextStyle(color: Colors.white)),
+                                        TextStyle(
+                                            color: Colors.white,
+                                        )),
                               ),
                               Row(
                                 children: [
@@ -255,7 +272,7 @@ class _CompanyState extends State<CompanyScreen> {
 
   void addcompany() async {
     try {
-      isLoding = true;
+      isLoding = false;
       Map<String, dynamic> body = {'company_name': nameCtrl.text.trim()};
       var response = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/company/add",

@@ -10,7 +10,8 @@ import 'model/company_model.dart';
 import 'model/product_model.dart';
 
 class Addproduct extends StatefulWidget {
-  const Addproduct({Key? key, required this.productListModel}) : super(key: key);
+  const Addproduct({Key? key, required this.productListModel})
+      : super(key: key);
 
   final productModel productListModel;
   @override
@@ -30,7 +31,6 @@ class _AddproductState extends State<Addproduct> {
   List<productModel> productlist = [];
   bool isLoding = false;
 
-
   final ImagePicker picker = ImagePicker();
   String imageUrl =
       "https://testecommerce.equitysofttechnologies.com/uploads/product_img/";
@@ -40,20 +40,20 @@ class _AddproductState extends State<Addproduct> {
   @override
   void initState() {
     super.initState();
-    if(widget.productListModel.id > 0){
-       productnameCtrl.text = widget.productListModel.productName;
-       descriptionCtrl.text = widget.productListModel.description;
-       priceCtrl.text = widget.productListModel.price.toString();
-       qtyCtrl.text = widget.productListModel.qty.toString();
-       companyvalue  = widget.productListModel.companyId;
-       categoryvalue = widget.productListModel.categoryId;
-       selectedImages = widget.productListModel.productImg.map((e) => e.productImgg).toList();
-       isEdit = true;
+    if (widget.productListModel.id > 0) {
+      productnameCtrl.text = widget.productListModel.productName;
+      descriptionCtrl.text = widget.productListModel.description;
+      priceCtrl.text = widget.productListModel.price.toString();
+      qtyCtrl.text = widget.productListModel.qty.toString();
+      companyvalue = widget.productListModel.companyId;
+      categoryvalue = widget.productListModel.categoryId;
+      selectedImages =
+          widget.productListModel.productImg.map((e) => e.productImgg).toList();
+      isEdit = true;
     }
     getcompany();
     getCategory();
     getproduct();
-
   }
 
   @override
@@ -77,12 +77,15 @@ class _AddproductState extends State<Addproduct> {
               ),
               Container(
                 width: 325,
-                decoration: BoxDecoration(boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black,
-                      offset: Offset(0.0, 0.0),
-                      blurRadius: 1.2),
-                ], borderRadius: BorderRadius.circular(10), color: Colors.white),
+                decoration: BoxDecoration(
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.black,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 1.2),
+                    ],
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<int>(
                       value: companyvalue,
@@ -143,14 +146,20 @@ class _AddproductState extends State<Addproduct> {
                 height: 10,
               ),
               AppTextfiled(
-
                   controller: descriptionCtrl,
                   maxLines: 5,
                   obscureText: false,
                   label: "Description"),
               AppTextfiled(
-                  controller: priceCtrl, obscureText: false, label: "Price"),
-              AppTextfiled(controller: qtyCtrl, obscureText: false, label: "Qty"),
+                  keyboardType:TextInputType.number,
+                  controller: priceCtrl,
+                  obscureText: false,
+                  label: "Price"),
+              AppTextfiled(
+                  keyboardType:TextInputType.number,
+                  controller: qtyCtrl,
+                  obscureText: false,
+                  label: "Qty"),
               const Padding(
                 padding: EdgeInsets.only(top: 10, right: 225, bottom: 10),
                 child: Text("Upload Image:"),
@@ -196,27 +205,27 @@ class _AddproductState extends State<Addproduct> {
                               ),
                               itemBuilder: (BuildContext context, int index) {
                                 return Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                            offset: Offset(0.0, 0.0),
-                                            blurRadius: 1.2,
-                                            color: Colors.grey,
-                                            blurStyle: BlurStyle.outer)
-                                      ],
-                                    ),
-                                    child: !selectedImages[index]
-                                            .contains("data/user")
-                                        ? Image.network(
-                                            imageUrl + selectedImages[index],
-                                          )
-                                        : Image.file(
-                                            File(selectedImages[index]),
-                                            fit: BoxFit.cover,
-                                          ),
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                          offset: Offset(0.0, 0.0),
+                                          blurRadius: 1.2,
+                                          color: Colors.grey,
+                                          blurStyle: BlurStyle.outer)
+                                    ],
+                                  ),
+                                  child: !selectedImages[index]
+                                          .contains("data/user")
+                                      ? Image.network(
+                                          imageUrl + selectedImages[index],
+                                        )
+                                      : Image.file(
+                                          File(selectedImages[index]),
+                                          fit: BoxFit.cover,
+                                        ),
                                 );
                               },
                             ),
@@ -226,9 +235,8 @@ class _AddproductState extends State<Addproduct> {
               ),
               ElevatedButton(
                   style:
-                  ElevatedButton.styleFrom(fixedSize: const Size(350, 40)),
-                  onPressed: () async{
-
+                      ElevatedButton.styleFrom(fixedSize: const Size(350, 40)),
+                  onPressed: () async {
                     print('UPDATE:::::::::::${widget.productListModel.id}');
                     /*   widget.productListModel.id > 0 & productmodel.id == 0
                           ? addProduct()
@@ -241,7 +249,7 @@ class _AddproductState extends State<Addproduct> {
                               categoryId: categoryValue ?? 0,
                               companyId: companyValue ?? 0,
                             ));*/
-                  /*  if (fromkey.currentState!.validate())
+                    /*  if (fromkey.currentState!.validate())
                     {
 
                     }*/
@@ -267,7 +275,6 @@ class _AddproductState extends State<Addproduct> {
                     Navigator.of(context).pop();
                   },
                   child: Text(isEdit ? "Update" : "SAVE")),
-
             ],
           ),
         ),

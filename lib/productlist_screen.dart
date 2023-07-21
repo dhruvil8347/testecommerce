@@ -41,11 +41,20 @@ class _productScreenState extends State<productScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-                onTap: (){
-                  Navigator.push(
+                onTap: () async {
+                 await Navigator.push(
                       context, MaterialPageRoute(
                     builder: (context) => Addproduct(
-                        productListModel: productModel()),));
+                        productListModel: productModel())
+                   ,)
+                 ).then((value) {
+                  if(value != null){
+                    setState(() {
+                      productlist.insert(0,value);
+                    });
+                  }
+                 });
+
                 },
                 child: const Icon(Icons.add)),
           ),
@@ -191,17 +200,17 @@ class _productScreenState extends State<productScreen> {
   void getproduct() async {
     try {
       isLoding = false;
-      var response = await Dio()
+      Response response = await Dio()
           .get("https://testecommerce.equitysofttechnologies.com/product/get");
       print(response.data);
       productlist = List<productModel>.from(
           response.data['r'].map((e) => productModel.fromJson(e)));
       /*productimg = List<ProductImg>.from(response.data.map((e)=> ProductImg.fromJson(e)));*/
 
-      setState(() {
+    /*  setState(() {
          getproduct();
       });
-
+*/
       setState(() {
         isLoding = false;
       });
