@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:testecommerce/model/product_model.dart';
-
 import 'addproduct_screen.dart';
 import 'model/product_model.dart';
 

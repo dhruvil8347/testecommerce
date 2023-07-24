@@ -19,6 +19,8 @@ class Addproduct extends StatefulWidget {
 }
 
 class _AddproductState extends State<Addproduct> {
+
+
   TextEditingController productnameCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
   TextEditingController priceCtrl = TextEditingController();
@@ -53,7 +55,7 @@ class _AddproductState extends State<Addproduct> {
     }
     getcompany();
     getCategory();
-    getproduct();
+
   }
 
   @override
@@ -134,6 +136,7 @@ class _AddproductState extends State<Addproduct> {
                         return DropdownMenuItem(
                             value: e.id, child: Text(e.categoryName));
                       }).toList(),
+
                       onChanged: (value) {
                         print(value);
                         setState(() {
@@ -284,7 +287,7 @@ class _AddproductState extends State<Addproduct> {
 
   void getcompany() async {
     try {
-      var response = await Dio()
+      Response response = await Dio()
           .get("http://testecommerce.equitysofttechnologies.com/company/get");
       print(response.data);
       companyList = CompanyModel.fromJson(response.data).company;
@@ -337,13 +340,14 @@ class _AddproductState extends State<Addproduct> {
      {
       'product_img' : mulitiselectedImages,
      };*/
-
       FormData data = FormData.fromMap(body);
-      var response = await Dio().post(
+      Response response = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/product/add",
           data: data);
       print(response);
-      setState(() {});
+      setState(() {
+        getproduct();
+      });
     } catch (e) {
       print(e);
       if (e is DioException) {
@@ -354,7 +358,7 @@ class _AddproductState extends State<Addproduct> {
 
   void getCategory() async {
     try {
-      var response = await Dio()
+      Response response = await Dio()
           .get("http://testecommerce.equitysofttechnologies.com/category/get");
       print(response.data);
       categoryList = CategoryModel.fromJson(response.data).category;

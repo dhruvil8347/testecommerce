@@ -4,6 +4,7 @@ import 'package:testecommerce/category_screen.dart';
 import 'package:testecommerce/company_screen.dart';
 import 'package:testecommerce/productlist_screen.dart';
 
+
 void main() {
   runApp(const MyApp());
 }
@@ -43,7 +44,7 @@ class _MyHomepageState extends State<MyHomepage> {
           children: [
             GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => productScreen(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const productScreen(),));
               },
               child: Container(
                 height: 200,
@@ -54,7 +55,7 @@ class _MyHomepageState extends State<MyHomepage> {
             ),
             GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryScreen(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryScreen(),));
               },
               child: Container(
                 height: 200,
@@ -65,7 +66,7 @@ class _MyHomepageState extends State<MyHomepage> {
             ),
             InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  CompanyScreen(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>  const CompanyScreen(),));
               },
               child: Container(
                 height: 200,
@@ -75,8 +76,10 @@ class _MyHomepageState extends State<MyHomepage> {
             ),
 
 
+
           ],
         ),
+
       ),
     );
   }

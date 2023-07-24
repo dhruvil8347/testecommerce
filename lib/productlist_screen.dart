@@ -14,9 +14,6 @@ class productScreen extends StatefulWidget {
 }
 
 class _productScreenState extends State<productScreen> {
-
-
-
   List<productModel> productlist = [];
   List<ProductImg> productimg = [];
   List<Company> comapanyList = [];
@@ -28,33 +25,32 @@ class _productScreenState extends State<productScreen> {
   @override
   void initState() {
     super.initState();
-    getproduct();
-  }
+    setState(() {
+      getproduct();
+    });
 
+  }
   bool value = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: const Text("Product")),
+        title: const Center(child: Text("Product")),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-                onTap: () async {
-                 await Navigator.push(
-                      context, MaterialPageRoute(
-                    builder: (context) => Addproduct(
-                        productListModel: productModel())
-                   ,)
-                 ).then((value) {
-                  if(value != null){
-                    setState(() {
-                      productlist.insert(0,value);
-                    });
-                  }
-                 });
+                onTap: () {
+                   Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            Addproduct(productListModel: productModel()),
+                      )).then((value) {
+                    getproduct();
 
+                  });
                 },
                 child: const Icon(Icons.add)),
           ),
@@ -72,12 +68,12 @@ class _productScreenState extends State<productScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                             Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GetProduct(
-                                productListModel: productlist[index]),
-                          ));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GetProduct(
+                                      productListModel: productlist[index]),
+                                ));
                           },
                           child: Container(
                             height: 130,
@@ -138,46 +134,63 @@ class _productScreenState extends State<productScreen> {
                                         height: 10,
                                       ),
                                       ElevatedButton(
-                                          onPressed: () async{
-                                            String refresh = await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Addproduct(
-                                                    productListModel:
-                                                        productlist[index],
-                                                  ),
-                                                ));
-
-                                            if(refresh == "refresh"){
+                                          onPressed: () async {
+                                            /*  String refresh = await*/ Navigator
+                                                .push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Addproduct(
+                                                        productListModel:
+                                                            productlist[index],
+                                                      ),
+                                                    )).then((value) {
                                               getproduct();
-                                            }
+                                            });
+
+                                            /* if(refresh == "refresh"){
+                                              getproduct();
+                                            }*/
                                           },
                                           style: ElevatedButton.styleFrom(
                                               fixedSize: const Size(80, 30)),
                                           child: const Text("Edit")),
                                       ElevatedButton(
                                           onPressed: () {
-                                            showDialog(context: context, builder: (context) {
-                                              return AlertDialog(
-                                                title: Text("Delete",style: TextStyle(color: Colors.red)),
-                                                content: Text("Are you sure if you wnat to Delete?"),
-                                                actions: [
-                                                  TextButton(onPressed: (){
-                                                    Navigator.of(context).pop();
-                                                  }, child: Text("Cancel")),
-
-                                                  TextButton(onPressed: (){
-                                                    deleteProduct(
-                                                        productlist[index].id);
-                                                    Navigator.of(context).pop();
-                                                  }, child: Text("Delete",style: TextStyle(color: Colors.red),)),
-
-                                                ],
-                                              );
-                                            },);
-
-
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: const Text("Delete",
+                                                      style: TextStyle(
+                                                          color: Colors.red)),
+                                                  content: const Text(
+                                                      "Are you sure if you wnat to Delete?"),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: const Text("Cancel")),
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          deleteProduct(
+                                                              productlist[index]
+                                                                  .id);
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: const Text(
+                                                          "Delete",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.red),
+                                                        )),
+                                                  ],
+                                                );
+                                              },
+                                            );
                                           },
                                           style: ElevatedButton.styleFrom(
                                               fixedSize: const Size(80, 30)),
@@ -197,6 +210,7 @@ class _productScreenState extends State<productScreen> {
       ),
     );
   }
+
   void getproduct() async {
     try {
       isLoding = false;
@@ -207,7 +221,7 @@ class _productScreenState extends State<productScreen> {
           response.data['r'].map((e) => productModel.fromJson(e)));
       /*productimg = List<ProductImg>.from(response.data.map((e)=> ProductImg.fromJson(e)));*/
 
-    /*  setState(() {
+      /*  setState(() {
          getproduct();
       });
 */
@@ -256,14 +270,8 @@ class _productScreenState extends State<productScreen> {
       setState(() {
         isLoding = true;
       });
-
     } catch (e) {
       print(e);
     }
   }
-
-
-
-
-
 }
