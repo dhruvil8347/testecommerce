@@ -14,13 +14,12 @@ class Addproduct extends StatefulWidget {
       : super(key: key);
 
   final productModel productListModel;
+
   @override
   State<Addproduct> createState() => _AddproductState();
 }
 
 class _AddproductState extends State<Addproduct> {
-
-
   TextEditingController productnameCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
   TextEditingController priceCtrl = TextEditingController();
@@ -55,7 +54,6 @@ class _AddproductState extends State<Addproduct> {
     }
     getcompany();
     getCategory();
-
   }
 
   @override
@@ -136,7 +134,6 @@ class _AddproductState extends State<Addproduct> {
                         return DropdownMenuItem(
                             value: e.id, child: Text(e.categoryName));
                       }).toList(),
-
                       onChanged: (value) {
                         print(value);
                         setState(() {
@@ -154,12 +151,12 @@ class _AddproductState extends State<Addproduct> {
                   obscureText: false,
                   label: "Description"),
               AppTextfiled(
-                  keyboardType:TextInputType.number,
+                  keyboardType: TextInputType.number,
                   controller: priceCtrl,
                   obscureText: false,
                   label: "Price"),
               AppTextfiled(
-                  keyboardType:TextInputType.number,
+                  keyboardType: TextInputType.number,
                   controller: qtyCtrl,
                   obscureText: false,
                   label: "Qty"),
@@ -257,7 +254,7 @@ class _AddproductState extends State<Addproduct> {
 
                     }*/
                     if (widget.productListModel.id > 0) {
-                      editProduct(productModel(
+                      await editProduct(productModel(
                         id: widget.productListModel.id,
                         productName: productnameCtrl.text,
                         description: descriptionCtrl.text,
@@ -265,17 +262,16 @@ class _AddproductState extends State<Addproduct> {
                         qty: int.parse(qtyCtrl.text),
                         categoryId: categoryvalue ?? 0,
                         companyId: companyvalue ?? 0,
-                      ));
+                      )).then((value) => Navigator.of(context).pop());
                     } else if (productmodel.id > 0) {
                       print("your product add successfully");
                       setState(() {
                         getproduct();
                       });
                     } else {
-                      addProduct();
+                      await addProduct()
+                          .then((value) => Navigator.of(context).pop());
                     }
-
-                    Navigator.of(context).pop();
                   },
                   child: Text(isEdit ? "Update" : "SAVE")),
             ],
@@ -297,7 +293,7 @@ class _AddproductState extends State<Addproduct> {
     }
   }
 
-  void editProduct(productModel product) async {
+  Future<void> editProduct(productModel product) async {
     try {
       Map<String, dynamic> body = {
         'id': product.id,
@@ -318,7 +314,7 @@ class _AddproductState extends State<Addproduct> {
     }
   }
 
-  void addProduct() async {
+  Future<void> addProduct() async {
     try {
       Map<String, dynamic> body = {
         'product_name': productnameCtrl.text,

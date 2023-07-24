@@ -232,17 +232,17 @@ class _CompanyState extends State<CompanyScreen> {
   void deletecompany(int id) async {
     try {
       isLoding = false;
-      print(productlist.length);
       List<productModel> dummylist = productlist.where((element) {
         print('${element.companyId} == $id');
         return element.companyId == id;
       }).toList();
+      print("DUMMY LIST => ${dummylist[0].id}");
 
       for (int i = 0; i > dummylist.length; i++) {
-        Map<String, dynamic> body = {'id': dummylist[i].id};
+        print("DELETE => ");
         await Dio().post(
-            "http://testecommerce.equitysofttechnologies.com/product/delete",
-            data: body);
+          "http://testecommerce.equitysofttechnologies.com/product/delete?id=${dummylist[i].id}",
+        );
       }
 
       Map<String, dynamic> body = {'id': id};
@@ -250,12 +250,8 @@ class _CompanyState extends State<CompanyScreen> {
           "http://testecommerce.equitysofttechnologies.com/company/delete",
           data: body);
       print(response.data);
-      setState(() {
-        getproduct();
-      });
-      setState(() {
-        getcompany();
-      });
+      await getproduct();
+      await getcompany();
       setState(() {
         isLoding = false;
       });
@@ -295,9 +291,7 @@ class _CompanyState extends State<CompanyScreen> {
       var response = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/company/add",
           data: body);
-      setState(() {
-        getcompany();
-      });
+      await getcompany();
       setState(() {
         isLoding = false;
       });
@@ -308,7 +302,7 @@ class _CompanyState extends State<CompanyScreen> {
     }
   }
 
-  void getproduct() async {
+  Future<void> getproduct() async {
     try {
       isLoding = false;
       Response response = await Dio()
@@ -326,7 +320,7 @@ class _CompanyState extends State<CompanyScreen> {
     }
   }
 
-  void getcompany() async {
+  Future<void> getcompany() async {
     try {
       isLoding = true;
       var response = await Dio()

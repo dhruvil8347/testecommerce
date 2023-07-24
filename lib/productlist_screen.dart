@@ -48,6 +48,7 @@ class _productScreenState extends State<productScreen> {
                         builder: (context) =>
                             Addproduct(productListModel: productModel()),
                       )).then((value) {
+                        print("REFRESH => ");
                     getproduct();
 
                   });
