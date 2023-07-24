@@ -41,8 +41,8 @@ class _productScreenState extends State<productScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-                onTap: () {
-                   Navigator.push(
+                onTap: () async{
+                 await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
@@ -73,7 +73,8 @@ class _productScreenState extends State<productScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => GetProduct(
                                       productListModel: productlist[index]),
-                                ));
+                                )
+                            );
                           },
                           child: Container(
                             height: 130,

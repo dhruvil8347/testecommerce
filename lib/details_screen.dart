@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:testecommerce/model/product_model.dart';
 import 'addproduct_screen.dart';
-import 'model/product_model.dart';
+/*import 'model/product_model.dart';*/
 
 class GetProduct extends StatefulWidget {
   const GetProduct({Key? key, required this.productListModel}) : super(key: key);
@@ -53,7 +53,7 @@ class _GetProductState extends State<GetProduct> {
             Padding(
               padding: const EdgeInsets.only(right: 210),
               child: Text(widget.productListModel.categoryName,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 9,
                     color: Colors.grey),),
             ),
@@ -76,7 +76,7 @@ class _GetProductState extends State<GetProduct> {
             Text(
                 "Lorem Ipsum is simply dummy text sum h theer took ${widget.productListModel.description}"
             ),
-            SizedBox(
+            const SizedBox(
               height: 35,
             ),
             Row(
@@ -95,12 +95,12 @@ class _GetProductState extends State<GetProduct> {
                         fixedSize: const Size(120, 30)),
                     child: const Text("Edit")),
                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(fixedSize: Size(120, 35)),
+                    style: ElevatedButton.styleFrom(fixedSize: const Size(120, 35)),
                     onPressed: () {
                       deleteProduct(widget.productListModel.id);
                       Navigator.of(context).pop();
                     },
-                    child: Text("Delete")),
+                    child: const Text("Delete")),
               ],
             ),
 

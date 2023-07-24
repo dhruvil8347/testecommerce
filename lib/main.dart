@@ -44,7 +44,7 @@ class _MyHomepageState extends State<MyHomepage> {
           children: [
             GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const productScreen(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => productScreen(),));
               },
               child: Container(
                 height: 200,
@@ -55,7 +55,7 @@ class _MyHomepageState extends State<MyHomepage> {
             ),
             GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryScreen(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryScreen(),));
               },
               child: Container(
                 height: 200,
@@ -66,7 +66,7 @@ class _MyHomepageState extends State<MyHomepage> {
             ),
             InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  const CompanyScreen(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>  CompanyScreen(),));
               },
               child: Container(
                 height: 200,
@@ -74,12 +74,8 @@ class _MyHomepageState extends State<MyHomepage> {
                 child: const Center(child: Text("Company",style: TextStyle(color: Colors.white,fontSize: 18),)),
               ),
             ),
-
-
-
           ],
         ),
-
       ),
     );
   }
