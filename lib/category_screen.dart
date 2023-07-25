@@ -13,6 +13,8 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   TextEditingController categoryCtrl = TextEditingController();
+  //
+
   Category categoryModel = Category();
   List<Category> categoryList = [];
   List<productModel> productlist = [];
@@ -22,9 +24,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   void initState() {
     super.initState();
-    getproduct();
     getCategory();
-
+    getproduct();
   }
 
   @override
@@ -33,11 +34,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.symmetric(horizontal: 78),
-
           child: Text("Category"),
         ),
       ),
-      body: Column(
+      body:
+      isLoding
+      ? Lottie.asset('assets/lottie/a.json')
+      : Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(15.0),
@@ -64,10 +67,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 print("null");
               },
               onPressed: () {
-                FocusNode currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus) {
-                  currentFocus.unfocus();
-                }
+                FocusScope.of(context).unfocus();
                 if (fromkey.currentState!.validate()) {
                   categoryModel.categoryName = categoryCtrl.text.trim();
                   if (categoryModel.id != 0) {
@@ -108,116 +108,96 @@ class _CategoryScreenState extends State<CategoryScreen> {
           Expanded(
             child: isLoding
                 ? Lottie.asset("assets/lottie/a.json")
-                : categoryList.isEmpty
-                    ? Image.asset("assets/images/data.png")
-                    : ListView.builder(
-                        itemCount: categoryList.length,
-                        itemBuilder: (context, index) {
-                          print("data->${categoryList[index].categoryName}");
-                          return ListTile(
-                            title: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blue),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const SizedBox(
-                                    width: 2,
-                                  ),
-                                  SizedBox(
-                                    width: 230,
-                                    child: Text(
-                                      categoryList[index].categoryName,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      InkWell(
-                                          onTap: () {
-                                            categoryModel = Category(
-                                              id: categoryList[index].id,
-                                              categoryName: categoryList[index]
-                                                  .categoryName,
-                                            );
-                                            categoryCtrl.text =
-                                                categoryList[index]
-                                                    .categoryName;
-                                            categoryModel.index = index;
-                                          },
-                                          child: const Icon(Icons.edit,
-                                              color: Colors.white)),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    title: const Text("Delete"),
-                                                    content: const Text(
-                                                        "Are you sure you want to delete?"),
-                                                    actions: [
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child:
-                                                              const Text("Cancel")),
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              isLoding = true;
-                                                            });
-                                                            /*   Future.delayed(
-                                                            const Duration(
-                                                                seconds: 3),
-                                                            () {
-                                                          setState(() {
-                                                            isLoding = false;
-                                                          });
-                                                        });*/
+                : ListView.builder(
+                    itemCount: categoryList.length,
+                    itemBuilder: (context, index) {
+                      print("data->${categoryList[index].categoryName}");
+                      return ListTile(
+                        title: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.blue),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(
+                                width: 3,
+                              ),
 
-                                                            deleteCategory(
-                                                                categoryList[
-                                                                        index]
-                                                                    .id);
-                                                            /* Navigator.of(context).pop();*/
-                                                          },
-                                                          child: isLoding
-                                                              ? Lottie.asset(
-                                                                  "assets/lottie/a.json")
-                                                              : const Text(
-                                                                  "Delete",
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .red),
-                                                                )),
-                                                    ],
-                                                  );
-                                                },
+                              SizedBox(
+                                width: 230,
+                                child: Text(
+                                  categoryList[index].categoryName,overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  InkWell(
+                                      onTap: () {
+                                        categoryModel = Category(
+                                          id: categoryList[index].id,
+                                          categoryName:
+                                              categoryList[index].categoryName,
+                                        );
+                                        categoryCtrl.text =
+                                            categoryList[index].categoryName;
+                                        categoryModel.index = index;
+                                      },
+                                      child: const Icon(Icons.edit,
+                                          color: Colors.white)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: const Text("Delete"),
+                                                content: const Text(
+                                                    "Are you sure you want to delete?"),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: const Text("Cancel")),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        deleteCategory(
+                                                            categoryList[index]
+                                                                .id);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: const Text(
+                                                        "Delete",
+                                                        style: TextStyle(
+                                                            color: Colors.red),
+
+                                                      )
+                                                  ),
+                                                ],
                                               );
                                             },
-                                            child: const Icon(Icons.delete,
-                                                color: Colors.white)),
-                                      ),
-                                    ],
-                                  )
+                                          );
+                                        },
+                                        child: const Icon(Icons.delete,
+                                            color: Colors.white)),
+                                  ),
                                 ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
           ),
         ],
       ),
@@ -227,28 +207,24 @@ class _CategoryScreenState extends State<CategoryScreen> {
   void deleteCategory(int id) async {
     try {
       isLoding = false;
-
       List<productModel> dummylist =
-      productlist.where((element) => element.categoryId == id).toList();
-      for (int i = 0; i > dummylist.length; i++) {
+          productlist.where((element) => element.categoryId == id).toList();
+      for (int i = 0; i < dummylist.length; i++) {
         Map<String, dynamic> body = {'id': dummylist[i].id};
-        await Dio().post(
+        Dio().post(
             "http://testecommerce.equitysofttechnologies.com/product/delete",
             data: body);
       }
-
       Map<String, dynamic> body = {'id': id};
       var response = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/category/delete",
           data: body);
       print(response.data);
-
-      setState(() {
-        getproduct();
-      });
-      setState(() {
-        getCategory();
-      });
+      /*   setState(() {
+        comapanyList.removeAt(1);
+      });*/
+      await getCategory();
+      await getproduct();
       setState(() {
         isLoding = false;
       });
@@ -257,20 +233,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
     }
   }
 
-  void getproduct() async {
+  Future<void> getproduct() async {
     try {
-      isLoding = false;
-      Response response = await Dio()
+      isLoding = true;
+      var response = await Dio()
           .get("https://testecommerce.equitysofttechnologies.com/product/get");
       print(response.data);
       productlist = List<productModel>.from(
           response.data['r'].map((e) => productModel.fromJson(e)));
       /*productimg = List<ProductImg>.from(response.data.map((e)=> ProductImg.fromJson(e)));*/
-
-      /*  setState(() {
-         getproduct();
-      });
-*/
       setState(() {
         isLoding = false;
       });
@@ -305,7 +276,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   void addCategory() async {
     try {
-      isLoding = false;
+      isLoding = true;
       Map<String, dynamic> body = {'category_name': categoryCtrl.text.trim()};
       var response = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/category/add",
@@ -323,7 +294,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     }
   }
 
-  void getCategory() async {
+  Future<void> getCategory() async {
     try {
       isLoding = true;
       var response = await Dio()
@@ -337,6 +308,4 @@ class _CategoryScreenState extends State<CategoryScreen> {
       print(e);
     }
   }
-
-  ///has code   Declare constant type** of int set value 7.
 }

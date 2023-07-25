@@ -6,7 +6,8 @@ import 'addproduct_screen.dart';
 /*import 'model/product_model.dart';*/
 
 class GetProduct extends StatefulWidget {
-  const GetProduct({Key? key, required this.productListModel}) : super(key: key);
+  const GetProduct({Key? key, required this.productListModel})
+      : super(key: key);
 
   /*final productModel = product();*/
   final productModel productListModel;
@@ -16,9 +17,9 @@ class GetProduct extends StatefulWidget {
 }
 
 class _GetProductState extends State<GetProduct> {
-
-  String ImageUrl = "https://testecommerce.equitysofttechnologies.com/uploads/product_img/";
-  List<productModel>  productlist = [];
+  String ImageUrl =
+      "https://testecommerce.equitysofttechnologies.com/uploads/product_img/";
+  List<productModel> productlist = [];
 
   @override
   Widget build(BuildContext context) {
@@ -30,42 +31,60 @@ class _GetProductState extends State<GetProduct> {
           children: [
             CarouselSlider(
               items: widget.productListModel.productImg.map((e) {
-                  return Builder(builder: (context) {
-                    return Image.network(ImageUrl+e.productImgg);
-                  },);
-                }).toList(),
-                options: CarouselOptions(
-                  height: 200,
-                  autoPlay: true,
-                ),
+                return Builder(
+                  builder: (context) {
+                    return Image.network(ImageUrl + e.productImgg);
+                  },
+                );
+              }).toList(),
+              options: CarouselOptions(
+                height: 200,
+                autoPlay: true,
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Product: ${widget.productListModel.productName}",
-                    style: const TextStyle(fontSize: 15, height: 3)),
-                Text(
-                  "Price: ${widget.productListModel.price}",
-                  style: const TextStyle(fontSize: 15, height: 3),
+                SizedBox(
+                  width: 230,
+                  child: Text("Product:${widget.productListModel.productName}",
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 15, height: 3)),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    "Price:${widget.productListModel.price}",
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 15, height: 3),
+                  ),
                 ),
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(right: 210),
-              child: Text(widget.productListModel.categoryName,
-                style: const TextStyle(
-                    fontSize: 9,
-                    color: Colors.grey),),
+              child: Text(
+                widget.productListModel.categoryName,
+                style: const TextStyle(fontSize: 9, color: Colors.grey),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  widget.productListModel.companyName,
-                  style: const TextStyle(height: 3, fontSize: 15),
+                SizedBox(
+                  width: 230,
+                  child: Text(
+                    " ${widget.productListModel.companyName}",
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(height: 3, fontSize: 15),
+                  ),
                 ),
-                Text("QTY ${widget.productListModel.qty}",
-                    style: const TextStyle(fontSize: 15, height: 3)),
+                SizedBox(
+                  width: 100,
+                  child: Text("QTY: ${widget.productListModel.qty}",
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 15, height: 3)),
+                ),
               ],
             ),
             const Padding(
@@ -74,8 +93,7 @@ class _GetProductState extends State<GetProduct> {
                   style: TextStyle(height: 1, fontSize: 16)),
             ),
             Text(
-                "Lorem Ipsum is simply dummy text sum h theer took ${widget.productListModel.description}"
-            ),
+                "Lorem Ipsum is simply dummy text sum h theer took ${widget.productListModel.description}"),
             const SizedBox(
               height: 35,
             ),
@@ -95,24 +113,47 @@ class _GetProductState extends State<GetProduct> {
                         fixedSize: const Size(120, 30)),
                     child: const Text("Edit")),
                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(fixedSize: const Size(120, 35)),
-                    onPressed: () {
-                      deleteProduct(widget.productListModel.id);
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(120, 35)),
+                    onPressed: () async {
+                      await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text("Delete",
+                                style: TextStyle(color: Colors.red)),
+                            content: Text("Are you sure you want to delete?"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Cancel")),
+                              TextButton(
+                                  onPressed: () {
+                                    deleteProduct(widget.productListModel.id);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    "Delete",
+                                    style: TextStyle(color: Colors.red),
+                                  ))
+                            ],
+                          );
+                        },
+                      );
+
                       Navigator.of(context).pop();
                     },
                     child: const Text("Delete")),
               ],
             ),
-
-
-
-
           ],
         ),
       ),
-
     );
   }
+
   void deleteProduct(int id) async {
     try {
       Map<String, dynamic> body = {'id': id};

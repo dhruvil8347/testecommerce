@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTextfiled extends StatelessWidget {
    AppTextfiled({Key? key,
@@ -11,6 +12,7 @@ class AppTextfiled extends StatelessWidget {
     this.maxLines,
     this.minLines,
     this.validator,
+    this.input,
 
 
 
@@ -25,6 +27,7 @@ class AppTextfiled extends StatelessWidget {
   final Color? textColor;
   final int? maxLines;
   final int? minLines;
+  final List<TextInputFormatter>? input;
 
 
   @override
@@ -34,6 +37,7 @@ class AppTextfiled extends StatelessWidget {
       child: TextFormField(
         validator: validator,
         controller: controller,
+        inputFormatters:input,
         keyboardType: keyboardType,
         cursorColor: cursorColor,
         obscureText: obscureText,

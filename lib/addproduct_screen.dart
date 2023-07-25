@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:testecommerce/common/textfiled.dart';
 import 'main.dart';
@@ -37,6 +37,7 @@ class _AddproductState extends State<Addproduct> {
       "https://testecommerce.equitysofttechnologies.com/uploads/product_img/";
   productModel productmodel = productModel();
   bool isEdit = false;
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -65,216 +66,273 @@ class _AddproductState extends State<Addproduct> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              AppTextfiled(
-                controller: productnameCtrl,
-                obscureText: false,
-                label: "Product Name",
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: 325,
-                decoration: BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.black,
-                          offset: Offset(0.0, 0.0),
-                          blurRadius: 1.2),
-                    ],
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<int>(
-                      value: companyvalue,
-                      borderRadius: BorderRadius.circular(10),
-                      hint: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Company"),
-                      ),
-                      items: companyList.map((e) {
-                        return DropdownMenuItem<int>(
-                            value: e.id, child: Text(e.companyName));
-                      }).toList(),
-                      onChanged: (value) {
-                        print(value);
-                        setState(() {
-                          companyvalue = value;
-                        });
-                      }),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: 325,
-                decoration: BoxDecoration(
-                  boxShadow: const [
-                    BoxShadow(
-                      offset: Offset(0.0, 0.0),
-                      color: Colors.black,
-                      blurRadius: 1.2,
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<int>(
-                      value: categoryvalue,
-                      borderRadius: BorderRadius.circular(10),
-                      hint: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("Category"),
-                      ),
-                      items: categoryList.map((e) {
-                        return DropdownMenuItem(
-                            value: e.id, child: Text(e.categoryName));
-                      }).toList(),
-                      onChanged: (value) {
-                        print(value);
-                        setState(() {
-                          categoryvalue = value;
-                        });
-                      }),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              AppTextfiled(
-                  controller: descriptionCtrl,
-                  maxLines: 5,
+          child: Form(
+            key: formkey,
+            child: Column(
+              children: [
+                AppTextfiled(
+                  validator: (value) {
+                    if(value == null || value.trim().isEmpty)
+                    {
+                      return "Required";
+                    }
+                    return null;
+                  },
+                  controller: productnameCtrl,
                   obscureText: false,
-                  label: "Description"),
-              AppTextfiled(
-                  keyboardType: TextInputType.number,
-                  controller: priceCtrl,
-                  obscureText: false,
-                  label: "Price"),
-              AppTextfiled(
-                  keyboardType: TextInputType.number,
-                  controller: qtyCtrl,
-                  obscureText: false,
-                  label: "Qty"),
-              const Padding(
-                padding: EdgeInsets.only(top: 10, right: 225, bottom: 10),
-                child: Text("Upload Image:"),
-              ),
-              GestureDetector(
-                onTap: () {
-                  getImages();
-                },
-                child: Container(
-                  height: 50,
-                  width: 80,
+                  label: "Product Name",
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: 325,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
                       boxShadow: const [
                         BoxShadow(
+                            color: Colors.black,
                             offset: Offset(0.0, 0.0),
-                            blurRadius: 1.2,
-                            color: Colors.grey,
-                            blurStyle: BlurStyle.outer),
-                      ]),
-                  child: const Icon(Icons.add),
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      width: 120,
-                      height: 60,
-                      child: selectedImages.isEmpty
-                          ? const Center(
-                              child: Text(
-                              "Image not found",
-                              style: TextStyle(color: Colors.red),
-                            ))
-                          : GridView.builder(
-                              itemCount: selectedImages.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                              ),
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                          offset: Offset(0.0, 0.0),
-                                          blurRadius: 1.2,
-                                          color: Colors.grey,
-                                          blurStyle: BlurStyle.outer)
-                                    ],
-                                  ),
-                                  child: !selectedImages[index]
-                                          .contains("data/user")
-                                      ? Image.network(
-                                          imageUrl + selectedImages[index],
-                                        )
-                                      : Image.file(
-                                          File(selectedImages[index]),
-                                          fit: BoxFit.cover,
-                                        ),
-                                );
-                              },
-                            ),
-                    ),
-                  ),
-                ],
-              ),
-              ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(fixedSize: const Size(350, 40)),
-                  onPressed: () async {
-                    print('UPDATE:::::::::::${widget.productListModel.id}');
-                    /*   widget.productListModel.id > 0 & productmodel.id == 0
-                          ? addProduct()
-                          : editProduct(productModel(
-                              id: widget.productListModel.id,
-                              productName: productnameCtrl.text,
-                              description: descriptionCtrl.text,
-                              price: double.parse(priceCtrl.text),
-                              qty: int.parse(qtyCtrl.text),
-                              categoryId: categoryValue ?? 0,
-                              companyId: companyValue ?? 0,
-                            ));*/
-                    /*  if (fromkey.currentState!.validate())
-                    {
+                            blurRadius: 1.2),
+                      ],
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButtonFormField<int>(
+                        validator: (value)
+                        {
+                          if(value == null ){
+                            return "Required";
+                          }
+                          return null;
+                        },
+                        value: companyvalue,
+                        borderRadius: BorderRadius.circular(10),
+                        hint: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text("Company"),
+                        ),
+                        items: companyList.map((e) {
+                          return DropdownMenuItem<int>(
 
-                    }*/
-                    if (widget.productListModel.id > 0) {
-                      await editProduct(productModel(
-                        id: widget.productListModel.id,
-                        productName: productnameCtrl.text,
-                        description: descriptionCtrl.text,
-                        price: double.parse(priceCtrl.text),
-                        qty: int.parse(qtyCtrl.text),
-                        categoryId: categoryvalue ?? 0,
-                        companyId: companyvalue ?? 0,
-                      )).then((value) => Navigator.of(context).pop());
-                    } else if (productmodel.id > 0) {
-                      print("your product add successfully");
-                      setState(() {
-                        getproduct();
-                      });
-                    } else {
-                      await addProduct()
-                          .then((value) => Navigator.of(context).pop());
+                              value: e.id, child: Text(e.companyName));
+                        }).toList(),
+                        onChanged: (value) {
+                          print(value);
+                          setState(() {
+                            companyvalue = value;
+                          });
+                        }),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: 325,
+                  decoration: BoxDecoration(
+                    boxShadow: const [
+                      BoxShadow(
+                        offset: Offset(0.0, 0.0),
+                        color: Colors.black,
+                        blurRadius: 1.2,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButtonFormField<int>(
+                      validator: (value)
+                      {
+                         if(value == null ){
+                           return "Required";
+                         }
+                         return null;
+                      },
+                        value: categoryvalue,
+                        borderRadius: BorderRadius.circular(10),
+                        hint: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text("Category"),
+                        ),
+                        items: categoryList.map((e) {
+                          return DropdownMenuItem(
+                              value: e.id, child: Text(e.categoryName));
+                        }).toList(),
+                        onChanged: (value) {
+                          print(value);
+                          setState(() {
+                            categoryvalue = value;
+                          });
+                        }),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                AppTextfiled(
+                  validator: (value)
+                  {
+                    if(value == null || value.trim().isEmpty)
+                    {
+                      return 'Required';
                     }
+                    return null;
+
                   },
-                  child: Text(isEdit ? "Update" : "SAVE")),
-            ],
+                    controller: descriptionCtrl,
+                    maxLines: 5,
+                    obscureText: false,
+                    label: "Description"),
+                AppTextfiled(
+                    validator: (value)
+                    {
+                      if(value == null || value.trim().isEmpty)
+                      {
+                        return 'Required';
+                      }
+                      return null;
+
+                    },
+                    keyboardType: TextInputType.number,
+                    input: [FilteringTextInputFormatter.digitsOnly  ],
+                    controller: priceCtrl,
+                    obscureText: false,
+                    label: "Price"),
+                AppTextfiled(
+                    validator: (value)
+                    {
+                      if(value == null || value.trim().isEmpty)
+                      {
+                        return 'Required';
+                      }
+                      return null;
+
+                    },
+
+                    controller: qtyCtrl,
+                    keyboardType: TextInputType.number,
+                    input: [FilteringTextInputFormatter.digitsOnly],
+                    obscureText: false,
+                    label: "Qty"),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10, right: 225, bottom: 10),
+                  child: Text("Upload Image:"),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    getImages();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 80,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                              offset: Offset(0.0, 0.0),
+                              blurRadius: 1.2,
+                              color: Colors.grey,
+                              blurStyle: BlurStyle.outer),
+                        ]),
+                    child: const Icon(Icons.add),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        width: 120,
+                        height: 60,
+                        child: selectedImages.isEmpty
+                            ? const Center(
+                                child: Text(
+                                "Image not found",
+                                style: TextStyle(color: Colors.red),
+                              ))
+                            : GridView.builder(
+                                itemCount: selectedImages.length,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                            offset: Offset(0.0, 0.0),
+                                            blurRadius: 1.2,
+                                            color: Colors.grey,
+                                            blurStyle: BlurStyle.outer)
+                                      ],
+                                    ),
+                                    child: !selectedImages[index]
+                                            .contains("data/user")
+                                        ? Image.network(
+                                            imageUrl + selectedImages[index],
+                                          )
+                                        : Image.file(
+                                            File(selectedImages[index]),
+                                            fit: BoxFit.cover,
+                                          ),
+                                  );
+                                },
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(fixedSize: const Size(350, 40)),
+                    onPressed: () async {
+                      print('UPDATE:::::::::::${widget.productListModel.id}');
+                      /*   widget.productListModel.id > 0 & productmodel.id == 0
+                            ? addProduct()
+                            : editProduct(productModel(
+                                id: widget.productListModel.id,
+                                productName: productnameCtrl.text,
+                                description: descriptionCtrl.text,
+                                price: double.parse(priceCtrl.text),
+                                qty: int.parse(qtyCtrl.text),
+                                categoryId: categoryValue ?? 0,
+                                companyId: companyValue ?? 0,
+                              ));*/
+                      /*  if (fromkey.currentState!.validate())
+                      {
+
+                      }*/
+                      if(formkey.currentState!.validate()) {
+                        if (widget.productListModel.id > 0) {
+                          await editProduct(productModel(
+                            id: widget.productListModel.id,
+                            productName: productnameCtrl.text,
+                            description: descriptionCtrl.text,
+                            price: double.parse(priceCtrl.text),
+                            qty: int.parse(qtyCtrl.text),
+                            categoryId: categoryvalue ?? 0,
+                            companyId: companyvalue ?? 0,
+                          )).then((value) => Navigator.of(context).pop());
+                        } else if (productmodel.id > 0) {
+                          print("your product add successfully");
+                          setState(() {
+                            getproduct();
+                          });
+                        } else {
+                          await addProduct()
+                              .then((value) => Navigator.of(context).pop());
+                        }
+                      }
+                    },
+                    child: Text(isEdit ? "Update" : "SAVE")),
+              ],
+            ),
           ),
         ),
       ),

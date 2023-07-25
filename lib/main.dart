@@ -4,10 +4,10 @@ import 'package:testecommerce/category_screen.dart';
 import 'package:testecommerce/company_screen.dart';
 import 'package:testecommerce/productlist_screen.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
+
 Logger logger = Logger();
 
 class MyApp extends StatelessWidget {
@@ -38,43 +38,85 @@ class _MyHomepageState extends State<MyHomepage> {
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-         crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => productScreen(),));
-              },
-              child: Container(
-                height: 200,
-                color: Colors.blue,
-                child: const Center(child: Text("Product",style: TextStyle(color: Colors.white,fontSize: 18),)),
-
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => productScreen(),
+                      ));
+                },
+                child: Container(
+                  height: 200,
+                  color: Colors.blue,
+                  child: const Center(
+                      child: Text(
+                    "Product",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  )),
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryScreen(),));
-              },
-              child: Container(
-                height: 200,
-                color: Colors.blue,
-                child: const Center(child: Text("Category",style: TextStyle(color: Colors.white,fontSize: 18),)),
-
+              SizedBox(height: 30),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategoryScreen(),
+                      ));
+                },
+                child: Container(
+                  height: 200,
+                  color: Colors.blue,
+                  child: const Center(
+                      child: Text(
+                    "Category",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  )),
+                ),
               ),
-            ),
-            InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  CompanyScreen(),));
-              },
-              child: Container(
-                height: 200,
-                color: Colors.blue,
-                child: const Center(child: Text("Company",style: TextStyle(color: Colors.white,fontSize: 18),)),
+              SizedBox(height: 30),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CompanyScreen(),
+                      ));
+                },
+                child: Container(
+                  height: 200,
+                  color: Colors.blue,
+                  child: const Center(
+                      child: Text(
+                    "Company",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  )),
+                ),
               ),
-            ),
-          ],
+             /* ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text("Delete"),
+                          content: Text("Are you sure you want to delete?"),
+                          actions: [
+                            TextButton(onPressed: (){}, child: Text("Delete")),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Text("on taabbbbbbb"))*/
+            ],
+          ),
         ),
       ),
     );
