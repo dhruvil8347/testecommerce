@@ -22,6 +22,12 @@ class _GetProductState extends State<GetProduct> {
   List<productModel> productlist = [];
 
   @override
+  void initState() {
+    getproduct();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
@@ -107,7 +113,12 @@ class _GetProductState extends State<GetProduct> {
                           MaterialPageRoute(
                             builder: (context) => Addproduct(
                                 productListModel: widget.productListModel),
-                          ));
+                          )
+                      ).then((value) {
+
+                       /* getproduct();*/
+                      }
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(120, 30)),
@@ -137,7 +148,8 @@ class _GetProductState extends State<GetProduct> {
                                   child: const Text(
                                     "Delete",
                                     style: TextStyle(color: Colors.red),
-                                  ))
+                                  )
+                              )
                             ],
                           );
                         },
@@ -161,6 +173,23 @@ class _GetProductState extends State<GetProduct> {
           "http://testecommerce.equitysofttechnologies.com/product/delete",
           data: body);
       print(response.data);
+    } catch (e) {
+      print(e);
+    }
+  }
+  Future<void> getproduct() async {
+    try {
+     /* isLoding = true;*/
+      var response = await Dio()
+          .get("https://testecommerce.equitysofttechnologies.com/product/get");
+      print(response.data);
+      productlist = List<productModel>.from(
+          response.data['r'].map((e) => productModel.fromJson(e)));
+      /*productimg = List<ProductImg>.from(response.data.map((e)=> ProductImg.fromJson(e)));*/
+
+      setState(() {
+      /*  isLoding = false;*/
+      });
     } catch (e) {
       print(e);
     }

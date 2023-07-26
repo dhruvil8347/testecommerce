@@ -17,6 +17,7 @@ class _productScreenState extends State<productScreen> {
   List<productModel> productlist = [];
   List<ProductImg> productimg = [];
   List<Company> comapanyList = [];
+  List<String> selectedImages = [];
   bool isLoding = false;
   productModel product = productModel();
   String imageUrl =
@@ -68,14 +69,16 @@ class _productScreenState extends State<productScreen> {
                       itemCount: productlist.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => GetProduct(
                                       productListModel: productlist[index]),
                                 )
-                            );
+                            ).then((value) {
+                              getproduct();
+                            });
                           },
                           child: Container(
                             height: 130,
@@ -246,6 +249,16 @@ class _productScreenState extends State<productScreen> {
         'description': product.description,
         'price': product.price,
       };
+      print(selectedImages);
+      for (int i = 0; i < selectedImages.length; i++) {
+        body.addAll({
+          'product_img[$i]': await MultipartFile.fromFile(
+            selectedImages[i],
+            filename: "${DateTime.now().toIso8601String()}.jpg",
+          )
+        });
+      }
+
       var respose = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/product/update",
           data: body);

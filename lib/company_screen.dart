@@ -76,8 +76,6 @@ class _CompanyState extends State<CompanyScreen> {
               onPressed: () {
                 print("id->${companyModel.id}");
                 FocusScope.of(context).unfocus();
-
-
                 if (fromkey.currentState!.validate()) {
                   companyModel.companyName = nameCtrl.text.trim();
                   if (companyModel.id != 0) {

@@ -314,10 +314,12 @@ class _AddproductState extends State<Addproduct> {
                             id: widget.productListModel.id,
                             productName: productnameCtrl.text,
                             description: descriptionCtrl.text,
+                            productImg: widget.productListModel.productImg,
                             price: double.parse(priceCtrl.text),
                             qty: int.parse(qtyCtrl.text),
                             categoryId: categoryvalue ?? 0,
                             companyId: companyvalue ?? 0,
+
                           )).then((value) => Navigator.of(context).pop());
                         } else if (productmodel.id > 0) {
                           print("your product add successfully");
@@ -361,10 +363,36 @@ class _AddproductState extends State<Addproduct> {
         'qty': product.qty,
         'description': product.description,
         'price': product.price,
+
       };
+
+ /*     List<String> removetemp = selectedImages.where((element) => element.contains('data/user')).toList();
+
+      for (int i = 0; i < removetemp.length; i++) {
+        body.addAll({
+          'product_img_remove[$i]': await MultipartFile.fromFile(
+            removetemp[i],
+            filename: "${DateTime.now().toIso8601String()}.jpg",
+          )
+        }
+        );
+      }
+*/
+
+     List<String> temp = selectedImages.where((element) => element.contains('data/user')).toList();
+      print(temp);
+      for (int i = 0; i < temp.length; i++) {
+        body.addAll({
+          'product_img[$i]': await MultipartFile.fromFile(
+            temp[i],
+            filename: "${DateTime.now().toIso8601String()}.jpg",
+          )
+        });
+      }
+      print(":::::::::::::::::::::::::::::");
       var respose = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/product/update",
-          data: body);
+          data: FormData.fromMap(body));
       setState(() {});
       print(respose.data);
     } catch (e) {
@@ -464,3 +492,4 @@ class _AddproductState extends State<Addproduct> {
     }
   }
 }
+///all time mixx
