@@ -29,8 +29,8 @@ class _productScreenState extends State<productScreen> {
     setState(() {
       getproduct();
     });
-
   }
+
   bool value = false;
 
   @override
@@ -42,16 +42,15 @@ class _productScreenState extends State<productScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-                onTap: () async{
-                 await Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
                             Addproduct(productListModel: productModel()),
                       )).then((value) {
-                        print("REFRESH => ");
+                    print("REFRESH => ");
                     getproduct();
-
                   });
                 },
                 child: const Icon(Icons.add)),
@@ -75,8 +74,7 @@ class _productScreenState extends State<productScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => GetProduct(
                                       productListModel: productlist[index]),
-                                )
-                            ).then((value) {
+                                )).then((value) {
                               getproduct();
                             });
                           },
@@ -177,7 +175,8 @@ class _productScreenState extends State<productScreen> {
                                                           Navigator.of(context)
                                                               .pop();
                                                         },
-                                                        child: const Text("Cancel")),
+                                                        child: const Text(
+                                                            "Cancel")),
                                                     TextButton(
                                                         onPressed: () {
                                                           deleteProduct(
@@ -218,7 +217,7 @@ class _productScreenState extends State<productScreen> {
 
   void getproduct() async {
     try {
-      isLoding = false;
+      isLoding = true;
       Response response = await Dio()
           .get("https://testecommerce.equitysofttechnologies.com/product/get");
       print(response.data);
@@ -249,7 +248,7 @@ class _productScreenState extends State<productScreen> {
         'description': product.description,
         'price': product.price,
       };
-      print(selectedImages);
+/*      print(selectedImages);
       for (int i = 0; i < selectedImages.length; i++) {
         body.addAll({
           'product_img[$i]': await MultipartFile.fromFile(
@@ -257,7 +256,7 @@ class _productScreenState extends State<productScreen> {
             filename: "${DateTime.now().toIso8601String()}.jpg",
           )
         });
-      }
+      }*/
 
       var respose = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/product/update",

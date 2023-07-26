@@ -39,7 +39,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ),
       body:
       isLoding
-      ? Lottie.asset('assets/lottie/a.json')
+      ? Center(
+        child: SizedBox(
+            width: 220,
+            child: Lottie.asset('assets/lottie/a.json')),
+      )
       : Column(
         children: [
           Padding(

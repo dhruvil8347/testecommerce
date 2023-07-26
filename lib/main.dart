@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:testecommerce/category_screen.dart';
 import 'package:testecommerce/company_screen.dart';
 import 'package:testecommerce/productlist_screen.dart';
+import 'package:testecommerce/spalsh.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: "star",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MyHomepage(),
+      home: const Splash(),
     );
   }
 }

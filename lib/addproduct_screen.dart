@@ -242,8 +242,8 @@ class _AddproductState extends State<Addproduct> {
                   children: [
                     Expanded(
                       child: SizedBox(
-                        width: 120,
-                        height: 60,
+                        width: 145,
+                        height: 120,
                         child: selectedImages.isEmpty
                             ? const Center(
                                 child: Text(
@@ -274,9 +274,23 @@ class _AddproductState extends State<Addproduct> {
                                     ),
                                     child: !selectedImages[index]
                                             .contains("data/user")
-                                        ? Image.network(
-                                            imageUrl + selectedImages[index],
-                                          )
+                                        ?
+                                            Stack(
+                                              children: [
+                                                Center(
+                                                  child: Image.network(
+                                                      imageUrl + selectedImages[index],
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                    onTap: (){
+
+
+                                                   /* List<String> remove = selectedImages.where((element) => element.contains("data/user")).toList();*/
+                                                    },
+                                                    child: Icon(Icons.close,color: Colors.red,)),
+                                              ],
+                                            )
                                         : Image.file(
                                             File(selectedImages[index]),
                                             fit: BoxFit.cover,
@@ -309,6 +323,7 @@ class _AddproductState extends State<Addproduct> {
 
                       }*/
                       if(formkey.currentState!.validate()) {
+
                         if (widget.productListModel.id > 0) {
                           await editProduct(productModel(
                             id: widget.productListModel.id,
@@ -363,9 +378,7 @@ class _AddproductState extends State<Addproduct> {
         'qty': product.qty,
         'description': product.description,
         'price': product.price,
-
       };
-
  /*     List<String> removetemp = selectedImages.where((element) => element.contains('data/user')).toList();
 
       for (int i = 0; i < removetemp.length; i++) {
@@ -379,8 +392,11 @@ class _AddproductState extends State<Addproduct> {
       }
 */
 
-     List<String> temp = selectedImages.where((element) => element.contains('data/user')).toList();
-      print(temp);
+
+
+      logger.d(selectedImages);
+      List<String> temp = selectedImages.where((element) => element.contains('data/user')).toList();
+      logger.wtf(temp);
       for (int i = 0; i < temp.length; i++) {
         body.addAll({
           'product_img[$i]': await MultipartFile.fromFile(
@@ -396,7 +412,12 @@ class _AddproductState extends State<Addproduct> {
       setState(() {});
       print(respose.data);
     } catch (e) {
-      print(e);
+      if(e is DioException){
+        print(e.response);
+      }else{
+        print(e);
+      }
+
     }
   }
 

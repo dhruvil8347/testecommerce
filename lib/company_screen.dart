@@ -44,7 +44,14 @@ class _CompanyState extends State<CompanyScreen> {
           child: Text("Company"),
         ),
       ),
-      body: Column(
+      body:
+      isLoding
+     ?Center(
+       child: SizedBox(
+            width: 220,
+            child: Lottie.asset("assets/lottie/a.json")),
+     )
+     : Column(
         children: [
           const SizedBox(
             height: 10,
