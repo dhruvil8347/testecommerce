@@ -8,6 +8,8 @@ import 'main.dart';
 import 'model/category_model.dart';
 import 'model/company_model.dart';
 import 'model/product_model.dart';
+/*import 'package:image_picker/image_picker.dart';*/
+/*import 'package:lottie/lottie.dart';*/
 
 class Addproduct extends StatefulWidget {
   const Addproduct({Key? key, required this.productListModel})
@@ -31,6 +33,14 @@ class _AddproductState extends State<Addproduct> {
   List<String> selectedImages = [];
   List<productModel> productlist = [];
   bool isLoding = false;
+  List<int> removeImage = [];
+
+
+  final int qtyMaxLength = 2;
+  String text = "";
+
+  final int priceLength = 5;
+  String priceText = "";
 
   final ImagePicker picker = ImagePicker();
   String imageUrl =
@@ -43,6 +53,7 @@ class _AddproductState extends State<Addproduct> {
   void initState() {
     super.initState();
     if (widget.productListModel.id > 0) {
+      productmodel = widget.productListModel;
       productnameCtrl.text = widget.productListModel.productName;
       descriptionCtrl.text = widget.productListModel.description;
       priceCtrl.text = widget.productListModel.price.toString();
@@ -68,16 +79,20 @@ class _AddproductState extends State<Addproduct> {
         child: SingleChildScrollView(
           child: Form(
             key: formkey,
+
+        /*    autovalidateMode: AutovalidateMode.onUserInteraction,*/
             child: Column(
               children: [
                 AppTextfiled(
                   validator: (value) {
-                    if(value == null || value.trim().isEmpty)
-                    {
+                    if (value == null || value.trim().isEmpty) {
                       return "Required";
                     }
                     return null;
                   },
+                 /* focusederrorborder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Colors.black)),*/
                   controller: productnameCtrl,
                   obscureText: false,
                   label: "Product Name",
@@ -85,131 +100,119 @@ class _AddproductState extends State<Addproduct> {
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                  width: 325,
-                  decoration: BoxDecoration(
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black,
-                            offset: Offset(0.0, 0.0),
-                            blurRadius: 1.2),
-                      ],
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButtonFormField<int>(
-                        validator: (value)
-                        {
-                          if(value == null ){
-                            return "Required";
-                          }
-                          return null;
-                        },
-                        value: companyvalue,
-                        borderRadius: BorderRadius.circular(10),
-                        hint: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("Company"),
-                        ),
-                        items: companyList.map((e) {
-                          return DropdownMenuItem<int>(
-
-                              value: e.id, child: Text(e.companyName));
-                        }).toList(),
-                        onChanged: (value) {
-                          print(value);
-                          setState(() {
-                            companyvalue = value;
-                          });
-                        }),
-                  ),
-                ),
+                DropdownButtonFormField<int>(
+                    validator: (value) {
+                      if (value == null) {
+                        return "Required";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),borderSide: BorderSide(color:Colors.red)),
+                      focusedErrorBorder: const OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                    ),
+                    value: companyvalue,
+                    borderRadius: BorderRadius.circular(10),
+                    hint: const Text("Company"),
+                    items: companyList.map((e) {
+                      return DropdownMenuItem<int>(
+                          value: e.id, child: Text(e.companyName));
+                    }).toList(),
+                    onChanged: (value) {
+                      print(value);
+                      setState(() {
+                        companyvalue = value;
+                      });
+                    }),
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                  width: 325,
-                  decoration: BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(
-                        offset: Offset(0.0, 0.0),
-                        color: Colors.black,
-                        blurRadius: 1.2,
-                      ),
-                    ],
+                DropdownButtonFormField<int>(
+                    validator: (value) {
+                      if (value == null) {
+                        return "Required";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        focusedErrorBorder: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        errorBorder: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10)),borderSide: BorderSide(color: Colors.red)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0))),
+                    value: categoryvalue,
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButtonFormField<int>(
-                      validator: (value)
-                      {
-                         if(value == null ){
-                           return "Required";
-                         }
-                         return null;
-                      },
-                        value: categoryvalue,
-                        borderRadius: BorderRadius.circular(10),
-                        hint: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text("Category"),
-                        ),
-                        items: categoryList.map((e) {
-                          return DropdownMenuItem(
-                              value: e.id, child: Text(e.categoryName));
-                        }).toList(),
-                        onChanged: (value) {
-                          print(value);
-                          setState(() {
-                            categoryvalue = value;
-                          });
-                        }),
-                  ),
-                ),
+                    hint: const Text("Category"),
+                    items: categoryList.map((e) {
+                      return DropdownMenuItem(
+                          value: e.id, child: Text(e.categoryName));
+                    }).toList(),
+
+                    onChanged: (value) {
+                      print(value);
+                      setState(() {
+                        categoryvalue = value;
+                      });
+                    }),
                 const SizedBox(
                   height: 10,
                 ),
                 AppTextfiled(
-                  validator: (value)
-                  {
-                    if(value == null || value.trim().isEmpty)
-                    {
-                      return 'Required';
-                    }
-                    return null;
-
-                  },
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Required';
+                      }
+                      return null;
+                    },
                     controller: descriptionCtrl,
                     maxLines: 5,
                     obscureText: false,
                     label: "Description"),
                 AppTextfiled(
-                    validator: (value)
-                    {
-                      if(value == null || value.trim().isEmpty)
-                      {
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
                         return 'Required';
                       }
                       return null;
-
+                    },
+                    onchanged: (value) {
+                      if (value.length <= priceLength) {
+                        text = value;
+                      } else {
+                        priceCtrl.text = text;
+                      }
                     },
                     keyboardType: TextInputType.number,
-                    input: [FilteringTextInputFormatter.digitsOnly  ],
+                    input: [FilteringTextInputFormatter.digitsOnly],
                     controller: priceCtrl,
                     obscureText: false,
                     label: "Price"),
                 AppTextfiled(
-                    validator: (value)
-                    {
-                      if(value == null || value.trim().isEmpty)
-                      {
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
                         return 'Required';
                       }
                       return null;
-
                     },
-
+                    onchanged: (value) {
+                      if (value.length <= qtyMaxLength) {
+                        text = value;
+                      } else {
+                        qtyCtrl.text = text;
+                      }
+                    },
                     controller: qtyCtrl,
                     keyboardType: TextInputType.number,
                     input: [FilteringTextInputFormatter.digitsOnly],
@@ -223,88 +226,135 @@ class _AddproductState extends State<Addproduct> {
                   onTap: () {
                     getImages();
                   },
-                  child: Container(
-                    height: 50,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [
-                          BoxShadow(
-                              offset: Offset(0.0, 0.0),
-                              blurRadius: 1.2,
-                              color: Colors.grey,
-                              blurStyle: BlurStyle.outer),
-                        ]),
-                    child: const Icon(Icons.add),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 50,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                                offset: Offset(0.0, 0.0),
+                                blurRadius: 1.2,
+                                color: Colors.grey,
+                                blurStyle: BlurStyle.outer),
+                          ]),
+                      child: const Icon(Icons.add),
+                    ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        width: 145,
-                        height: 120,
-                        child: selectedImages.isEmpty
-                            ? const Center(
-                                child: Text(
-                                "Image not found",
-                                style: TextStyle(color: Colors.red),
-                              ))
-                            : GridView.builder(
-                                itemCount: selectedImages.length,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                ),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                            offset: Offset(0.0, 0.0),
-                                            blurRadius: 1.2,
-                                            color: Colors.grey,
-                                            blurStyle: BlurStyle.outer)
-                                      ],
-                                    ),
-                                    child: !selectedImages[index]
-                                            .contains("data/user")
-                                        ?
-                                            Stack(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          width: 145,
+                          height: 120,
+                          child: selectedImages.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                  "Image not found",
+                                  style: TextStyle(color: Colors.red),
+                                ))
+                              : GridView.builder(
+                                  itemCount: selectedImages.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 4,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
+                                  ),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container(
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                              offset: Offset(0.0, 0.0),
+                                              blurRadius: 1.2,
+                                              color: Colors.grey,
+                                              blurStyle: BlurStyle.outer)
+                                        ],
+                                      ),
+                                      child: !selectedImages[index]
+                                              .contains("data/user")
+                                          ? Stack(
                                               children: [
                                                 Center(
                                                   child: Image.network(
-                                                      imageUrl + selectedImages[index],
+                                                    imageUrl +
+                                                        selectedImages[index],
                                                   ),
                                                 ),
                                                 GestureDetector(
-                                                    onTap: (){
-
-
-                                                   /* List<String> remove = selectedImages.where((element) => element.contains("data/user")).toList();*/
+                                                    onTap: () {
+                                                      if (!selectedImages[index]
+                                                          .contains(
+                                                              'https://')) {
+                                                        removeImage.add(
+                                                            productmodel
+                                                                .productImg[
+                                                                    index]
+                                                                .id);
+                                                        logger.i(
+                                                            "list->${productmodel.productImg.length}");
+                                                      }
+                                                      selectedImages
+                                                          .removeAt(index);
+                                                      setState(() {});
+                                                      print(
+                                                          "REMOVE IMG => ${removeImage}");
                                                     },
-                                                    child: Icon(Icons.close,color: Colors.red,)),
+                                                    child: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.red,
+                                                    )),
                                               ],
                                             )
-                                        : Image.file(
-                                            File(selectedImages[index]),
-                                            fit: BoxFit.cover,
-                                          ),
-                                  );
-                                },
-                              ),
+                                          : Stack(
+                                              children: [
+                                                Center(
+                                                  child: Image.file(
+                                                    File(selectedImages[index]),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      selectedImages
+                                                          .removeAt(index);
+                                                      setState(() {});
+                                                      print(
+                                                          "REMOVE:::::::::${removeImage}");
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+                const SizedBox(height: 20),
                 ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(fixedSize: const Size(350, 40)),
+                    onLongPress: (){
+                      print("null");
+                    },
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(350, 50)),
+
                     onPressed: () async {
                       print('UPDATE:::::::::::${widget.productListModel.id}');
                       /*   widget.productListModel.id > 0 & productmodel.id == 0
@@ -322,8 +372,13 @@ class _AddproductState extends State<Addproduct> {
                       {
 
                       }*/
-                      if(formkey.currentState!.validate()) {
 
+                      if (formkey.currentState!.validate()) {
+                        productmodel.productName = productnameCtrl.text.trim();
+                        if (isLoding) return;
+                        setState(() {
+                          isLoding = true;
+                        });
                         if (widget.productListModel.id > 0) {
                           await editProduct(productModel(
                             id: widget.productListModel.id,
@@ -334,7 +389,6 @@ class _AddproductState extends State<Addproduct> {
                             qty: int.parse(qtyCtrl.text),
                             categoryId: categoryvalue ?? 0,
                             companyId: companyvalue ?? 0,
-
                           )).then((value) => Navigator.of(context).pop());
                         } else if (productmodel.id > 0) {
                           print("your product add successfully");
@@ -347,7 +401,18 @@ class _AddproductState extends State<Addproduct> {
                         }
                       }
                     },
-                    child: Text(isEdit ? "Update" : "SAVE")),
+                    child: isLoding
+                        ? const Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                              Text("Please wait"),
+                            ],
+                          )
+                        : Text(isEdit ? "Update" : "SAVE")),
               ],
             ),
           ),
@@ -370,6 +435,7 @@ class _AddproductState extends State<Addproduct> {
 
   Future<void> editProduct(productModel product) async {
     try {
+      print(removeImage);
       Map<String, dynamic> body = {
         'id': product.id,
         'product_name': product.productName,
@@ -378,25 +444,15 @@ class _AddproductState extends State<Addproduct> {
         'qty': product.qty,
         'description': product.description,
         'price': product.price,
+        if (removeImage.isNotEmpty) 'product_img_remove': removeImage.join(","),
       };
- /*     List<String> removetemp = selectedImages.where((element) => element.contains('data/user')).toList();
-
-      for (int i = 0; i < removetemp.length; i++) {
-        body.addAll({
-          'product_img_remove[$i]': await MultipartFile.fromFile(
-            removetemp[i],
-            filename: "${DateTime.now().toIso8601String()}.jpg",
-          )
-        }
-        );
-      }
-*/
-
-
-
       logger.d(selectedImages);
-      List<String> temp = selectedImages.where((element) => element.contains('data/user')).toList();
+      List<String> temp = selectedImages
+          .where((element) => element.contains('data/user'))
+          .toList();
+
       logger.wtf(temp);
+
       for (int i = 0; i < temp.length; i++) {
         body.addAll({
           'product_img[$i]': await MultipartFile.fromFile(
@@ -406,18 +462,17 @@ class _AddproductState extends State<Addproduct> {
         });
       }
       print(":::::::::::::::::::::::::::::");
-      var respose = await Dio().post(
+      Response respose = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/product/update",
           data: FormData.fromMap(body));
       setState(() {});
       print(respose.data);
     } catch (e) {
-      if(e is DioException){
+      if (e is DioException) {
         print(e.response);
-      }else{
+      } else {
         print(e);
       }
-
     }
   }
 
@@ -431,6 +486,7 @@ class _AddproductState extends State<Addproduct> {
         'category_id': categoryvalue,
         'company_id': companyvalue,
       };
+
       for (int i = 0; i < selectedImages.length; i++) {
         body.addAll({
           'product_img[$i]': await MultipartFile.fromFile(
@@ -513,5 +569,6 @@ class _AddproductState extends State<Addproduct> {
     }
   }
 }
+
 ///all time mixx logger
-/// change gannerally
+/// change gannerallyfgfgfg

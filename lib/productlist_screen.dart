@@ -19,6 +19,7 @@ class _productScreenState extends State<productScreen> {
   List<Company> comapanyList = [];
   List<String> selectedImages = [];
   bool isLoding = false;
+
   productModel product = productModel();
   String imageUrl =
       "https://testecommerce.equitysofttechnologies.com/uploads/product_img/";
@@ -62,152 +63,164 @@ class _productScreenState extends State<productScreen> {
         child: Column(
           children: [
             Expanded(
-              child: isLoding
-                  ? Lottie.asset("assets/lottie/a.json")
-                  : ListView.builder(
-                      itemCount: productlist.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () async {
-                            await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => GetProduct(
-                                      productListModel: productlist[index]),
-                                )).then((value) {
-                              getproduct();
-                            });
-                          },
-                          child: Container(
-                            height: 130,
-                            width: 330,
-                            child: Card(
-                              elevation: 5,
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  SizedBox(
-                                    height: 80,
-                                    width: 80,
-                                    child: Image.network(
-                                      imageUrl +
-                                          productlist[index]
-                                              .productImg
-                                              .first
-                                              .productImgg,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20, left: 10),
-                                    child: Container(
-                                      width: 120,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(productlist[index].productName,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                              )),
-                                          Text(
-                                              " ${productlist[index].categoryName}",
-                                              style: const TextStyle(
-                                                  fontSize: 9,
-                                                  color: Colors.grey)),
-                                          Text(
-                                            "Qty: 0${productlist[index].qty.toString()}",
-                                            style: const TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.grey),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Column(
+              child: productlist.isEmpty
+                  ? Image.asset("assets/images/data.png")
+                  : isLoding
+                      ? Lottie.asset("assets/lottie/a.json")
+                      : ListView.builder(
+                          itemCount: productlist.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GetProduct(
+                                          productListModel: productlist[index]),
+                                    )).then((value) {
+                                  getproduct();
+                                });
+                              },
+                              child: Container(
+                                height: 130,
+                                width: 330,
+                                child: Card(
+                                  elevation: 5,
+                                  child: Row(
                                     children: [
                                       const SizedBox(
-                                        height: 10,
+                                        width: 10,
                                       ),
-                                      ElevatedButton(
-                                          onPressed: () async {
-                                            /*  String refresh = await*/ Navigator
-                                                .push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          Addproduct(
-                                                        productListModel:
-                                                            productlist[index],
-                                                      ),
-                                                    )).then((value) {
-                                              getproduct();
-                                            });
+                                      SizedBox(
+                                        height: 80,
+                                        width: 80,
+                                        child: Image.network(imageUrl +
+                                            productlist[index]
+                                                .productImg
+                                                .first
+                                                .productImgg),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 20, left: 10),
+                                        child: Container(
+                                          width: 120,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  productlist[index]
+                                                      .productName
+                                                      .trim(),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                  )),
+                                              Text(
+                                                  " ${productlist[index].categoryName}",
+                                                  style: const TextStyle(
+                                                      fontSize: 9,
+                                                      color: Colors.grey)),
+                                              Text(
+                                                "Qty: 0${productlist[index].qty.toString()}",
+                                                style: const TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.grey),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      Column(
+                                        children: [
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          ElevatedButton(
+                                              onPressed: () async {
+                                                /*  String refresh = await*/ Navigator
+                                                    .push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Addproduct(
+                                                            productListModel:
+                                                                productlist[
+                                                                    index],
+                                                          ),
+                                                        )).then((value) {
+                                                  getproduct();
+                                                });
 
-                                            /* if(refresh == "refresh"){
+                                                /* if(refresh == "refresh"){
                                               getproduct();
                                             }*/
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              fixedSize: const Size(80, 30)),
-                                          child: const Text("Edit")),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: const Text("Delete",
-                                                      style: TextStyle(
-                                                          color: Colors.red)),
-                                                  content: const Text(
-                                                      "Are you sure if you wnat to Delete?"),
-                                                  actions: [
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: const Text(
-                                                            "Cancel")),
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          deleteProduct(
-                                                              productlist[index]
-                                                                  .id);
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: const Text(
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                  fixedSize:
+                                                      const Size(80, 30)),
+                                              child: const Text("Edit")),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      title: const Text(
                                                           "Delete",
                                                           style: TextStyle(
                                                               color:
-                                                                  Colors.red),
-                                                        )),
-                                                  ],
+                                                                  Colors.red)),
+                                                      content: const Text(
+                                                          "Are you sure if you wnat to Delete?"),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: const Text(
+                                                                "Cancel")),
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              deleteProduct(
+                                                                  productlist[
+                                                                          index]
+                                                                      .id);
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: const Text(
+                                                              "Delete",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .red),
+                                                            )),
+                                                      ],
+                                                    );
+                                                  },
                                                 );
                                               },
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              fixedSize: const Size(80, 30)),
-                                          child: const Text("Delete")),
+                                              style: ElevatedButton.styleFrom(
+                                                  fixedSize:
+                                                      const Size(80, 30)),
+                                              child: const Text("Delete")),
+                                        ],
+                                      )
                                     ],
-                                  )
-                                ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                            );
+                          },
+              ),
             ),
           ],
         ),
@@ -248,7 +261,7 @@ class _productScreenState extends State<productScreen> {
         'description': product.description,
         'price': product.price,
       };
-/*      print(selectedImages);
+     /*      print(selectedImages);
       for (int i = 0; i < selectedImages.length; i++) {
         body.addAll({
           'product_img[$i]': await MultipartFile.fromFile(
@@ -257,8 +270,7 @@ class _productScreenState extends State<productScreen> {
           )
         });
       }*/
-
-      var respose = await Dio().post(
+      Response respose = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/product/update",
           data: body);
       print(respose.data);

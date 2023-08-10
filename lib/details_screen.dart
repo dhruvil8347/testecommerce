@@ -53,14 +53,15 @@ class _GetProductState extends State<GetProduct> {
               children: [
                 SizedBox(
                   width: 230,
-                  child: Text("Product:${widget.productListModel.productName}",
+                  child: Text(
+                      "Product: ${widget.productListModel.productName.trim()}",
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 15, height: 3)),
                 ),
                 SizedBox(
                   width: 100,
                   child: Text(
-                    "Price:${widget.productListModel.price}",
+                    "Price: ${widget.productListModel.price}",
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 15, height: 3),
                   ),
@@ -80,7 +81,7 @@ class _GetProductState extends State<GetProduct> {
                 SizedBox(
                   width: 230,
                   child: Text(
-                    " ${widget.productListModel.companyName}",
+                    "Company: ${widget.productListModel.companyName}",
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(height: 3, fontSize: 15),
                   ),
@@ -113,12 +114,9 @@ class _GetProductState extends State<GetProduct> {
                           MaterialPageRoute(
                             builder: (context) => Addproduct(
                                 productListModel: widget.productListModel),
-                          )
-                      ).then((value) {
-
-                       /* getproduct();*/
-                      }
-                      );
+                          )).then((value) {
+                        /* getproduct();*/
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(120, 30)),
@@ -137,7 +135,7 @@ class _GetProductState extends State<GetProduct> {
                             actions: [
                               TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
                                   },
                                   child: Text("Cancel")),
                               TextButton(
@@ -148,14 +146,11 @@ class _GetProductState extends State<GetProduct> {
                                   child: const Text(
                                     "Delete",
                                     style: TextStyle(color: Colors.red),
-                                  )
-                              )
+                                  ))
                             ],
                           );
                         },
                       );
-
-                      Navigator.of(context).pop();
                     },
                     child: const Text("Delete")),
               ],
@@ -177,9 +172,10 @@ class _GetProductState extends State<GetProduct> {
       print(e);
     }
   }
+
   Future<void> getproduct() async {
     try {
-     /* isLoding = true;*/
+      /* isLoding = true;*/
       var response = await Dio()
           .get("https://testecommerce.equitysofttechnologies.com/product/get");
       print(response.data);
@@ -188,7 +184,7 @@ class _GetProductState extends State<GetProduct> {
       /*productimg = List<ProductImg>.from(response.data.map((e)=> ProductImg.fromJson(e)));*/
 
       setState(() {
-      /*  isLoding = false;*/
+        /*  isLoding = false;*/
       });
     } catch (e) {
       print(e);

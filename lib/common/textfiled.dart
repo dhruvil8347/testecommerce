@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppTextfiled extends StatelessWidget {
-   AppTextfiled({Key? key,
-     this.controller,
+  AppTextfiled({
+    Key? key,
+    this.controller,
     this.keyboardType,
     this.cursorColor,
     required this.obscureText,
@@ -13,9 +14,10 @@ class AppTextfiled extends StatelessWidget {
     this.minLines,
     this.validator,
     this.input,
-
-
-
+    this.maxlength,
+    this.onchanged,
+    this.focusedborder,
+    this.focusederrorborder,
   }) : super(key: key);
 
   final TextEditingController? controller;
@@ -28,7 +30,10 @@ class AppTextfiled extends StatelessWidget {
   final int? maxLines;
   final int? minLines;
   final List<TextInputFormatter>? input;
-
+  final int? maxlength;
+  final void Function(String)? onchanged;
+  final InputBorder? focusedborder;
+  final InputBorder? focusederrorborder;
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +41,18 @@ class AppTextfiled extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
         validator: validator,
+        maxLength: maxlength,
+        onChanged: onchanged,
         controller: controller,
-        inputFormatters:input,
+        inputFormatters: input,
         keyboardType: keyboardType,
         cursorColor: cursorColor,
         obscureText: obscureText,
         maxLines: maxLines,
         minLines: maxLines,
         decoration: InputDecoration(
+          focusedBorder: focusedborder,
+          focusedErrorBorder: focusederrorborder,
           label: Text(
             label,
             style: TextStyle(

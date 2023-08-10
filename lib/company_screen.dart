@@ -30,6 +30,10 @@ class _CompanyState extends State<CompanyScreen> {
   bool validate = false;
   bool isCheck = false;
   final fromkey = GlobalKey<FormState>();
+  bool autoValidate = false;
+
+  /* final int maxLengt = 5;
+  String text = "";*/
 
   // List<Re> comapany = [];
   // R view = R.fromJson({});
@@ -39,19 +43,17 @@ class _CompanyState extends State<CompanyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 78),
+        title: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 78),
           child: Text("Company"),
         ),
       ),
-      body:
-      isLoding
-     ?Center(
-       child: SizedBox(
-            width: 220,
-            child: Lottie.asset("assets/lottie/a.json")),
-     )
-     : Column(
+      body: isLoding
+          ? Center(
+        child: SizedBox(
+            width: 220, child: Lottie.asset("assets/lottie/a.json")),
+      )
+          : Column(
         children: [
           const SizedBox(
             height: 10,
@@ -60,16 +62,29 @@ class _CompanyState extends State<CompanyScreen> {
             padding: const EdgeInsets.all(15.0),
             child: Form(
               key: fromkey,
+              /*autovalidateMode: AutovalidateMode.onUserInteraction,*/
               child: TextFormField(
                 validator: (value) {
-                  if (value?.trim().isEmpty ?? false) {
+                  if (value
+                      ?.trim()
+                      .isEmpty ?? false) {
                     return "*required Companyname ";
                   }
                   return null;
                 },
                 controller: nameCtrl,
+                /*onChanged: (value) {
+                        if (value.length <= maxLengt) {
+                          text = value;
+                        } else {
+                          nameCtrl.text = text;
+                        }
+                      },*/
 
                 decoration: InputDecoration(
+                    focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.blue)),
                     label: const Text("Company Name"),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10))),
@@ -93,8 +108,6 @@ class _CompanyState extends State<CompanyScreen> {
                   }
                   nameCtrl.clear();
                 }
-
-
               },
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(330, 45),
@@ -126,99 +139,110 @@ class _CompanyState extends State<CompanyScreen> {
             child: isLoding
                 ? Lottie.asset("assets/lottie/a.json")
                 : ListView.builder(
-                    itemCount: comapanyList.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.blue),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const SizedBox(
-                                width: 2,
-                              ),
-                              SizedBox(
-                                width: 230,
-                                child: Text(
-                                    comapanyList[index].companyName,overflow: TextOverflow.ellipsis,
-                                    style:
-                                        const TextStyle(color: Colors.white)),
-                              ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                      onTap: () {
-                                        companyModel = Company(
-                                            id: comapanyList[index].id,
-                                            companyName: comapanyList[index]
-                                                .companyName);
-                                        nameCtrl.text =
-                                            comapanyList[index].companyName;
-                                        companyModel.index = index;
-                                      },
-                                      child: const Icon(Icons.edit,
-                                          color: Colors.white)),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                title: const Text("Delete",
-                                                    style: TextStyle(
-                                                        color: Colors.red)),
-                                                content: const Text(
-                                                    'Are you sure you want to delete?'),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Text("Cancel")),
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        deletecompany(
-                                                            comapanyList[index]
-                                                                .id);
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: const Text(
-                                                        "Delete",
-                                                        style: TextStyle(
-                                                            color: Colors.red),
-                                                      ))
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: const Icon(
-                                          Icons.delete,
-                                          color: Colors.white,
-                                        )),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
+                 itemCount: comapanyList.length,
+                  itemBuilder: (context, index) {
+                return ListTile(
+                  title: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.blue),
+                    child: Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(
+                          width: 2,
                         ),
-                        /*trailing: Row(
+                        SizedBox(
+                          width: 230,
+                          child: Text(
+                              comapanyList[index].companyName,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: Colors.white)),
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  companyModel = Company(
+                                      id: comapanyList[index].id,
+                                      companyName:
+                                      comapanyList[index]
+                                          .companyName);
+                                  nameCtrl.text =
+                                      comapanyList[index]
+                                          .companyName;
+                                  companyModel.index = index;
+                                },
+                                child: const Icon(Icons.edit,
+                                    color: Colors.white)),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                              "Delete",
+                                              style: TextStyle(
+                                                  color:
+                                                  Colors.red)),
+                                          content: const Text(
+                                              'Are you sure you want to delete?'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(
+                                                      context)
+                                                      .pop();
+                                                },
+                                                child:
+                                                Text("Cancel")),
+                                            TextButton(
+                                                onPressed: () {
+                                                  deletecompany(
+                                                      comapanyList[
+                                                      index]
+                                                          .id);
+                                                  Navigator.of(
+                                                      context)
+                                                      .pop();
+                                                },
+                                                child: const Text(
+                                                  "Delete",
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .red),
+                                                ))
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                  )),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  /*trailing: Row(
                          mainAxisSize: MainAxisSize.min,
                          children: [
                          Text("name: ${comapanyList[index].companyName}"),
                          Icon(Icons.delete),
                     ],
                   ),*/
-                      );
-                    },
-                  ),
+                );
+              },
+            ),
           )
         ],
       ),
@@ -229,7 +253,7 @@ class _CompanyState extends State<CompanyScreen> {
     try {
       isLoding = false;
       List<productModel> dummyList =
-          productlist.where((element) => element.companyId == id).toList();
+      productlist.where((element) => element.companyId == id).toList();
       for (int i = 0; i < dummyList.length; i++) {
         Map<String, dynamic> body = {'id': dummyList[i].id};
         Dio().post(
@@ -276,7 +300,7 @@ class _CompanyState extends State<CompanyScreen> {
     }
   }
 
- Future<void> getproduct() async {
+  Future<void> getproduct() async {
     try {
       isLoding = true;
       var response = await Dio()
@@ -314,13 +338,15 @@ class _CompanyState extends State<CompanyScreen> {
     }
   }
 
- Future<void> getcompany() async {
+  Future<void> getcompany() async {
     try {
       isLoding = true;
       var response = await Dio()
           .get("http://testecommerce.equitysofttechnologies.com/company/get");
       print(response.data);
-      comapanyList = CompanyModel.fromJson(response.data).company;
+      comapanyList = CompanyModel
+          .fromJson(response.data)
+          .company;
       setState(() {
         isLoding = false;
       });
