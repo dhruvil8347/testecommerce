@@ -392,7 +392,8 @@ class _AddproductState extends State<Addproduct> {
         'product_name': product.productName,
         'company_id': product.companyId,
         'category_id': product.categoryId,
-        if (removeImg.isNotEmpty) 'product_img_remove': removeImg.join(","),
+        if (removeImg.isNotEmpty)
+          'product_img_remove': removeImg.join(","),
         'qty': product.qty,
         'description': product.description,
         'price': product.price,
@@ -456,11 +457,10 @@ class _AddproductState extends State<Addproduct> {
           )
         });
       }
-/*  Map<String, dynamic> img =
+    /*  Map<String, dynamic> img =
      {
       'product_img' : mulitiselectedImages,
      };*/
-
       FormData data = FormData.fromMap(body);
       Response response = await Dio().post(
           "http://testecommerce.equitysofttechnologies.com/product/add",
@@ -489,6 +489,7 @@ class _AddproductState extends State<Addproduct> {
     }
   }
 
+
   Future getImages() async {
     final pickedFile = await picker.pickMultiImage(
         imageQuality: 100, maxHeight: 1000, maxWidth: 1000);
@@ -514,6 +515,7 @@ class _AddproductState extends State<Addproduct> {
     );
   }
 
+
   void getproduct() async {
     try {
       isLoding = true;
@@ -532,6 +534,8 @@ class _AddproductState extends State<Addproduct> {
     }
   }
 }
+
+
 
 ///all time mixx logger
 /// change gannerally
